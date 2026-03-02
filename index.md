@@ -1,7 +1,7 @@
 # CS30 Work
 
 ## Demos
-- add them
+- [Image Demo](03-images)
 
 ## Assignments
-- add them later
+- [Interactive Scene](interactive-scene)
