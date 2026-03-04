@@ -1,41 +1,63 @@
-// Project Title
-// Your Name
-// Date
-//
-// Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// reflex games
 
-
-// globall variable
-let number = 80;
+let boxX;
+let boxY;
+let boxSize = 50;
+let score = 0;
+let boxColor;
 
 function setup() {
-  createCanvas(700, 400);
-  background("black");
-  stroke("white");
-  noLoop();
+  createCanvas(windowWidth, windowHeight);
+  resetGame();
 }
 
 function draw() {
+  drawBackground();
+  drawBox();
+  drawScore();
+  MouseHit();
+}
+
+function drawBackground() {
+  background(220);
   
-  line(number, 0, number, height);
-  number = 50;
-  
-  for (let number = 120; number < 200; number += 2) {
-    line(number, 0, number, height);
-    //console.log(number);
+}
+
+function drawBox() {
+  fill(boxColor);
+  rect(boxX, boxY, boxSize, boxSize);
+}
+
+function drawScore() {
+  fill(0);
+  textSize(20);
+  text("Score: " + score, 20, 30);
+}
+
+function MouseHit() {
+  if (mouseX > boxX && mouseX < boxX + boxSize && mouseY > boxY && mouseY < boxY + boxSize) {
+    score++;
+    moveBox();
+  }
+}
+
+function moveBox() {
+  boxX = random(width - boxSize);
+  boxY = random(height - boxSize);
+}
+
+function keyPressed() {
+  if (key === 'c' || key === 'C') {
+    boxColor = color(random(255), random(255), random(255));
   }
   
-  drawAnotherLine();
-  
-  drawYetOneMoreLine();
+  if (key === 'r' || key === 'R') {
+    resetGame();
+  }
 }
 
-function drawAnotherLine() {
-  let number = 320;
-  line(number, 0, number, height);
-}
-
-function drawYetOneMoreLine() {
-  line(number + 5, 0, number + 5, height);
+function resetGame() {
+  score = 0;
+  boxColor = color(255, 0, 0);
+  moveBox();
 }
