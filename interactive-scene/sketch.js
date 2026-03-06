@@ -38,6 +38,7 @@ function MouseHit() {
   if (mouseX > boxX && mouseX < boxX + boxSize && mouseY > boxY && mouseY < boxY + boxSize) {
     score++;
     moveBox();
+    boxColor = color(random(255), random(255), random(255));
   }
 }
 
@@ -47,10 +48,6 @@ function moveBox() {
 }
 
 function keyPressed() {
-  if (key === 'c' || key === 'C') {
-    boxColor = color(random(255), random(255), random(255));
-  }
-  
   if (key === 'r' || key === 'R') {
     resetGame();
   }
