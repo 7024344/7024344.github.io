@@ -11,5 +11,21 @@ function setup() {
 }
 
 function draw() {
-  background(220);
+  drawBoard();
+}
+
+function drawBoard() {
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+
+      let x = i * 300;
+      let y = j * 300;
+
+      rect(x, y, 300, 300);
+    }
+  }
+
+function () {
+
+}
 }
