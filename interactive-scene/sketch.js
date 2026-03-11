@@ -35,7 +35,7 @@ function drawScore() {
 }
 
 function MouseHit() {
-  if (mouseX > boxX && mouseX < boxX + boxSize && mouseY > boxY && mouseY < boxY + boxSize) {
+  if (mouseX && mouseY === boxX && boxY) {
     score++;
     moveBox();
     boxColor = color(random(255), random(255), random(255));
