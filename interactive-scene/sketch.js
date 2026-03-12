@@ -1,21 +1,23 @@
 // reflex games
 
-let boxX;
-let boxY;
-let boxSize = 50;
+let x;
+let y;
+let w = 50;
+let h = 50;
 let score = 0;
 let boxColor;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  resetGame();
+  moveBox();
+  boxColor = color(255, 0, 0);
 }
 
 function draw() {
   drawBackground();
   drawBox();
   drawScore();
-  MouseHit();
+  mouseHit();
 }
 
 function drawBackground() {
@@ -25,7 +27,7 @@ function drawBackground() {
 
 function drawBox() {
   fill(boxColor);
-  rect(boxX, boxY, boxSize, boxSize);
+  rect(x, y, w, h);
 }
 
 function drawScore() {
@@ -34,27 +36,15 @@ function drawScore() {
   text("Score: " + score, 20, 30);
 }
 
-function MouseHit() {
-  if (mouseX > boxX && mouseX < boxX + boxSize && mouseY > boxY && mouseY < boxY + boxSize) {
-    score++;
+function mouseHit() {
+  if ( mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h) {
+    score += 1;
     moveBox();
     boxColor = color(random(255), random(255), random(255));
   }
 }
 
 function moveBox() {
-  boxX = random(width - boxSize);
-  boxY = random(height - boxSize);
-}
-
-function keyPressed() {
-  if (key === 'r' || key === 'R') {
-    resetGame();
-  }
-}
-
-function resetGame() {
-  score = 0;
-  boxColor = color(255, 0, 0);
-  moveBox();
+  x = random(width - w);
+  y = random(height - h);
 }
