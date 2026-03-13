@@ -9,14 +9,14 @@ let boxColor;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  moveBox();
-  boxColor = color(255, 0, 0);
+  resetScore();
 }
 
 function draw() {
   drawBackground();
   drawBox();
   drawScore();
+  drawReset();
   mouseHit();
 }
 
@@ -49,9 +49,19 @@ function moveBox() {
 }
 
 function keyPressed() {
-  if (key === "r") {
-    score = 0;
-    moveBox();
-    boxColor = color(255, 0, 0);
+  if (key === "r" || key === "R") {
+    resetScore();
   }
+}
+
+function resetScore() {
+  score = 0;
+  moveBox();
+  boxColor = color(255, 0, 0);
+}
+
+function drawReset() {
+  fill(0);
+  textSize(20);
+  text("R for reset score" , 20, 60);
 }
