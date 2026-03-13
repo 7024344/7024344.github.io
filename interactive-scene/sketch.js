@@ -22,7 +22,6 @@ function draw() {
 
 function drawBackground() {
   background(220);
-  
 }
 
 function drawBox() {
@@ -47,4 +46,12 @@ function mouseHit() {
 function moveBox() {
   x = random(width - w);
   y = random(height - h);
+}
+
+function keyPressed() {
+  if (key === "r") {
+    score = 0;
+    moveBox();
+    boxColor = color(255, 0, 0);
+  }
 }
