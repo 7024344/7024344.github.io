@@ -6,6 +6,8 @@
 // - describe what you did to take this project "above and beyond"
 
 
+let Board = [];
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
 }
@@ -24,8 +26,4 @@ function drawBoard() {
       rect(x, y, 300, 300);
     }
   }
-
-function () {
-
-}
 }
