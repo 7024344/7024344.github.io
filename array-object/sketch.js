@@ -6,7 +6,7 @@
 // - describe what you did to take this project "above and beyond"
 
 
-let Board = [];
+let Board = ["", "", "", "", "", "", "", "", ""];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
