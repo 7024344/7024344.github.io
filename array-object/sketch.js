@@ -6,24 +6,55 @@
 // - describe what you did to take this project "above and beyond"
 
 
-let Board = ["", "", "", "", "", "", "", "", ""];
+let size = 600;
+let use = size / 3;
+
+let board = ["", "", "", "", "", "", "", "", ""];
+
+let player = {current: "X"};
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(size, size);
 }
 
 function draw() {
-  drawBoard();
+  background(220);
+  drawGrid();
+  drawXO();
 }
 
-function drawBoard() {
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
+function drawGrid() {
+  for (let i = 1; i < 3; i++) {
+    line(i * use, 0, i * use, size);
+    line(0, i * use, size, i * use);
+  }
+}
 
-      let x = i * 300;
-      let y = j * 300;
+function drawXO() {
+  textSize(128);
+  textAlign(CENTER, CENTER);
 
-      rect(x, y, 300, 300);
+  for (let i = 0; i < board.length; i++) {
+    let x = (i % 3) * use + use / 2;
+    let y = floor(i / 3) * use + use / 2;
+
+    text(board[i], x, y);
+  }
+}
+
+function mousePressed() {
+  let drawX = floor(mouseX / use);
+  let drawY = floor(mouseY / use);
+  let index = drawX + drawY * 3;
+
+  if (board[index] === "") {
+    board[index] = player.current;
+
+    if (player.current === "X") {
+      player.current = "O";
+    } 
+    else {
+      player.current = "X";
     }
   }
 }
