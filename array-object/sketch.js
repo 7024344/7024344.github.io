@@ -35,7 +35,7 @@ function drawXO() {
   textAlign(CENTER, CENTER);
 
   for (let i = 0; i < board.length; i++) {
-    let x = (i % 3) * use + use / 2;
+    let x = i % 3 * use + use / 2;
     let y = floor(i / 3) * use + use / 2;
 
     text(board[i], x, y);
