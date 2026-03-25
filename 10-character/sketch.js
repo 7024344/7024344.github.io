@@ -1,6 +1,6 @@
-// 2d rectangular grid demo
+// Character in Grid Demo
 
-const CELL_SIZE = 100;
+const CELL_SIZE = 40;
 const OPEN_TILE = 0;
 const IMPASSIBLE = 1;
 const PLAYER = 9;
@@ -11,13 +11,21 @@ let thePlayer = {
   x: 0,
   y: 0,
 };
+let pathImg;
+let grassImg;
+
+function preload() {
+  pathImg = loadImage("paving.jpg");
+  grassImg = loadImage("grass.jpg");
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   rows = Math.floor(height/CELL_SIZE);
   cols = Math.floor(width/CELL_SIZE);
   grid = generateRandomGrid(cols, rows);
-  grid = [thePlayer.y][thePlayer.x] = PLAYER;
+  //put character in grid
+  grid[thePlayer.y][thePlayer.x] = PLAYER;
 }
 
 function draw() {
@@ -36,11 +44,11 @@ function mousePressed() {
 function keyPressed() {
   if (key === "r") {
     grid = generateRandomGrid(cols, rows);
-    grid = [thePlayer.y][thePlayer.x] = PLAYER;
+    grid[thePlayer.y][thePlayer.x] = PLAYER;
   }
   else if (key === "e") {
     grid = generateEmptyGrid(cols, rows);
-    grid = [thePlayer.y][thePlayer.x] = PLAYER;
+    grid[thePlayer.y][thePlayer.x] = PLAYER;
   }
   else if (key === "s") {
     movePlayer(thePlayer.x, thePlayer.y + 1);
@@ -57,12 +65,20 @@ function keyPressed() {
 }
 
 function movePlayer(x, y) {
+  if (x >= 0 && x < cols && y >= 0 && y < rows && grid[y][x] === OPEN_TILE) {
+    //keep track of where the player was
+    let oldX = thePlayer.x;
+    let oldY = thePlayer.y;
 
-  if (x >= 0 && x <= cols && y >= 0 && y <= rows) {
+    //moving the player
     thePlayer.x = x;
     thePlayer.y = y;
   
-    grid = [thePlayer.y][thePlayer.x] = PLAYER;
+    //putting the player in grid
+    grid[thePlayer.y][thePlayer.x] = PLAYER;
+
+    //reset the old player spot to be an open tile
+    grid[oldY][oldX] = OPEN_TILE;
   }
 }
 
@@ -82,15 +98,17 @@ function displayGrid() {
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
       if (grid[y][x] === OPEN_TILE) {
-        fill("white");
+        //fill("white");
+        image(pathImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
       else if (grid[y][x] === IMPASSIBLE) {
-        fill("black");
+        //fill("black");
+        image(grassImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
-      else if (gird[y][x] === PLAYER) {
+      else if (grid[y][x] === PLAYER) {
         fill("red");
+        square(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
       }
-      square(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
     }
   }
 }
@@ -101,10 +119,10 @@ function generateRandomGrid(cols, rows) {
     newGrid.push([]);
     for (let x = 0; x < cols; x++) {
       if (random(100) < 50) {
-        newGrid[y].push(0);
+        newGrid[y].push(OPEN_TILE);
       }
       else {
-        newGrid[y].push(1);
+        newGrid[y].push(IMPASSIBLE);
       }
     }
   }
@@ -116,7 +134,7 @@ function generateEmptyGrid(cols, rows) {
   for (let y = 0; y < rows; y++) {
     newGrid.push([]);
     for (let x = 0; x < cols; x++) {
-      newGrid[y].push(0);
+      newGrid[y].push(OPEN_TILE);
     }
   }
   return newGrid;
