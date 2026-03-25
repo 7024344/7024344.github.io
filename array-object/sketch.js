@@ -3,7 +3,7 @@
 // March 5/26
 //
 // Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// Make a XO games.
 
 
 let size = 600;
