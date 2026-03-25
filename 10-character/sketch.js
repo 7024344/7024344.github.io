@@ -1,31 +1,27 @@
 // 2d rectangular grid demo
 
-const CELL_SIZE = 20;
-const RENDER_ON_FRAME_MULTIPLE = 3;
-const DEAD_CELL = 0;
-const LIVE_CELL = 1;
-let autoPlayIsOn = false;
+const CELL_SIZE = 100;
+const OPEN_TILE = 0;
+const IMPASSIBLE = 1;
+const PLAYER = 9;
 let rows;
 let cols;
 let grid;
-let gosper;
-
-function preload() {
-  gosper = loadJSON("gosper.json");
-}
+let thePlayer = {
+  x: 0,
+  y: 0,
+};
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   rows = Math.floor(height/CELL_SIZE);
   cols = Math.floor(width/CELL_SIZE);
   grid = generateRandomGrid(cols, rows);
+  grid = [thePlayer.y][thePlayer.x] = PLAYER;
 }
 
 function draw() {
   background(220);
-  if (autoPlayIsOn && frameCount % RENDER_ON_FRAME_MULTIPLE === 0) {
-    grid = takeTurn();
-  }
   displayGrid();
 }
 
@@ -40,74 +36,44 @@ function mousePressed() {
 function keyPressed() {
   if (key === "r") {
     grid = generateRandomGrid(cols, rows);
+    grid = [thePlayer.y][thePlayer.x] = PLAYER;
   }
   else if (key === "e") {
     grid = generateEmptyGrid(cols, rows);
+    grid = [thePlayer.y][thePlayer.x] = PLAYER;
   }
-  else if (key === " ") {
-    grid = takeTurn();
+  else if (key === "s") {
+    movePlayer(thePlayer.x, thePlayer.y + 1);
+  }
+  else if (key === "w") {
+    movePlayer(thePlayer.x, thePlayer.y - 1);
+  }
+  else if (key === "d") {
+    movePlayer(thePlayer.x + 1, thePlayer.y);
   }
   else if (key === "a") {
-    autoPlayIsOn = !autoPlayIsOn;
-  }
-  else if (key === "g") {
-    grid = gosper;
+    movePlayer(thePlayer.x - 1, thePlayer.y);
   }
 }
 
-function takeTurn() {
-  let nextTurn = generateEmptyGrid(cols, rows);
+function movePlayer(x, y) {
 
-  //look at every cell
-  for (let x = 0; x < cols; x++) {
-    for (let y = 0; y < rows; y++) {
-      let neighbours = 0;
-
-      for (let i = -1; i <= 1; i++) {
-        for (let j = -1; j <= 1; j++) {
-          //don't fall off the edge of the grid
-          if (x+i >= 0 && x+i < cols && y+j >= 0 && y+j < rows) {
-            neighbours += grid[y+j][x+i];
-          }
-        }
-      }
-
-      //don't count self as neighbour
-      neighbours -= grid[y][x];
-
-      //apply the rules
-      if (grid[y][x] === LIVE_CELL) {
-        //currently alive
-        if (neighbours === 2 || neighbours === 3) {
-          nextTurn[y][x] = LIVE_CELL;
-        }
-        else {
-          nextTurn[y][x] = DEAD_CELL;
-        }
-      }
-
-      if (grid[y][x] === DEAD_CELL) {
-        //currently dead
-        if (neighbours === 3) {
-          nextTurn[y][x] = LIVE_CELL;
-        }
-        else {
-          nextTurn[y][x] = DEAD_CELL;
-        }
-      }
-    }
+  if (x >= 0 && x <= cols && y >= 0 && y <= rows) {
+    thePlayer.x = x;
+    thePlayer.y = y;
+  
+    grid = [thePlayer.y][thePlayer.x] = PLAYER;
   }
-  return nextTurn;
 }
 
 function toggleCell(x, y) {
   //make sure the cell you're toggling is in the grid
   if (x >= 0 && x < cols && y >= 0 && y < rows) {
-    if (grid[y][x] === DEAD_CELL) {
-      grid[y][x] = LIVE_CELL;
+    if (grid[y][x] === OPEN_TILE) {
+      grid[y][x] = IMPASSIBLE;
     }
-    else if (grid[y][x] === LIVE_CELL) {
-      grid[y][x] = DEAD_CELL;
+    else if (grid[y][x] === IMPASSIBLE) {
+      grid[y][x] = OPEN_TILE;
     }
   }
 }
@@ -115,11 +81,14 @@ function toggleCell(x, y) {
 function displayGrid() {
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
-      if (grid[y][x] === DEAD_CELL) {
+      if (grid[y][x] === OPEN_TILE) {
         fill("white");
       }
-      else if (grid[y][x] === LIVE_CELL) {
+      else if (grid[y][x] === IMPASSIBLE) {
         fill("black");
+      }
+      else if (gird[y][x] === PLAYER) {
+        fill("red");
       }
       square(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
     }
@@ -132,10 +101,10 @@ function generateRandomGrid(cols, rows) {
     newGrid.push([]);
     for (let x = 0; x < cols; x++) {
       if (random(100) < 50) {
-        newGrid[y].push(DEAD_CELL);
+        newGrid[y].push(0);
       }
       else {
-        newGrid[y].push(LIVE_CELL);
+        newGrid[y].push(1);
       }
     }
   }
@@ -147,7 +116,7 @@ function generateEmptyGrid(cols, rows) {
   for (let y = 0; y < rows; y++) {
     newGrid.push([]);
     for (let x = 0; x < cols; x++) {
-      newGrid[y].push(DEAD_CELL);
+      newGrid[y].push(0);
     }
   }
   return newGrid;
