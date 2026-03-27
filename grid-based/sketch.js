@@ -9,11 +9,16 @@ const CELL_SIZE = 40;
 const OPEN_ROAD = 0;
 const CLOSE_ROAD = 1;
 const PLAYER = 9;
+const BOXS = 5;
 let rows;
 let cols;
 let grid;
 let thePlayer = {
   x: 0,
+  y: 0,
+};
+let theBoxs = {
+  x: 2,
   y: 0,
 };
 
@@ -23,6 +28,7 @@ function setup() {
   cols = Math.floor(width/CELL_SIZE);
   grid = generateEmptyGrid(cols, rows);
   grid[thePlayer.y][thePlayer.x] = PLAYER;
+  grid[theBoxs.y][theBoxs.x] = BOXS;
   noStroke();
 }
 
@@ -36,18 +42,19 @@ function mousePressed() {
   let y = Math.floor(mouseY/CELL_SIZE);
 
   toggleCell(x, y);
+
 }
 
 function keyPressed() {
   if (key === "e") {
     grid = generateEmptyGrid(cols, rows);
     grid[thePlayer.y][thePlayer.x] = PLAYER;
+    grid[theBoxs.y][theBoxs.x] = BOXS;
   }
-  // else if (ley === "p") {
-
-  // }
   else if (key === "s") {
     movePlayer(thePlayer.x, thePlayer.y + 1);
+    //chackfunctions moveBoxs
+    moveBoxs(theBoxs.x, theBoxs.y + 1);
   }
   else if (key === "w") {
     movePlayer(thePlayer.x, thePlayer.y - 1);
@@ -61,14 +68,32 @@ function keyPressed() {
 }
 
 function movePlayer(x, y) {
-  if (x >= 0 && x < cols && y >= 0 && y < rows && grid[y][x] === OPEN_TILE) {
+  if (x >= 0 && x < cols && y >= 0 && y < rows && grid[y][x] === OPEN_ROAD) {
+    let oldX = thePlayer.x;
+    let oldY = thePlayer.y;
+
     thePlayer.x = x;
     thePlayer.y = y;
-
+  
     grid[thePlayer.y][thePlayer.x] = PLAYER;
+
+    grid[oldY][oldX] = OPEN_ROAD;
   }
 }
 
+function moveBoxs(x, y) {
+  if (x >= 0 && x < cols && y >= 0 && y < rows && grid[y][x] === OPEN_ROAD) {
+    let oldX = theBoxs.x;
+    let oldY = theBoxs.y;
+
+    theBoxs.x = x;
+    theBoxs.y = y;
+  
+    grid[theBoxs.y][theBoxs.x] = BOXS;
+
+    grid[oldY][oldX] = OPEN_ROAD;
+  }
+}
 
 function toggleCell(x, y) {
   if (x >= 0 && x < cols && y >= 0 && y < rows) {
@@ -92,6 +117,9 @@ function displayGrid() {
       }
       else if (grid[y][x] === PLAYER) {
         fill("green");
+      }
+      else if (grid[y][x] === BOXS) {
+        fill("yellow");
       }
       square(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
     }
