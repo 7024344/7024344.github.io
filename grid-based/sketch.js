@@ -57,8 +57,6 @@ function keyPressed() {
   }
   else if (key === "s") {
     movePlayer(thePlayer.x, thePlayer.y + 1);
-    //chackfunctions moveBoxs
-    moveBoxs(theBoxs.x, theBoxs.y + 1);
   }
   else if (key === "w") {
     movePlayer(thePlayer.x, thePlayer.y - 1);
@@ -146,28 +144,23 @@ function generateEmptyGrid(cols, rows) {
   return newGrid;
 }
 
-function at(dx, dy) {
-  let newX = thePlayer.x + dx;
-  let newY = thePlayer.y + dy;
+// function checkMoves(dx, dy) {
+//   let newX = thePlayer.x + dx;
+//   let newY = thePlayer.y + dy;
 
-  if (newX < 0 || newX >= cols || newY < 0 || newY >= rows) return;
-
-  // Case 1: Empty space → move player
-  if (grid[newY][newX] === OPEN_ROAD) {
-    movePlayer(newX, newY);
-  }
-
-  else if (grid[newY][newX] === BOXS) {
-    let boxNextX = newX + dx;
-    let boxNextY = newY + dy;
-
-    if (
-      boxNextX >= 0 && boxNextX < cols &&
-      boxNextY >= 0 && boxNextY < rows &&
-      grid[boxNextY][boxNextX] === OPEN_ROAD
-    ) {
-      moveBoxs(boxNextX, boxNextY);
-      movePlayer(newX, newY);
-    }
-  }
-}
+//   if (newX < 0 || newX >= cols || newY < 0 || newY >= rows) {
+//     if (grid[newY][newX] === OPEN_ROAD) {
+//       movePlayer(newX, newY);
+//     }
+  
+//     else if (grid[newY][newX] === BOXS) {
+//       let boxNextX = newX + dx;
+//       let boxNextY = newY + dy;
+  
+//       if (boxNextX >= 0 && boxNextX < cols && boxNextY >= 0 && boxNextY < rows && grid[boxNextY][boxNextX] === OPEN_ROAD) {
+//         moveBoxs(boxNextX, boxNextY);
+//         movePlayer(newX, newY);
+//       }
+//     }
+//   }
+// }
