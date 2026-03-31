@@ -22,6 +22,7 @@ let theBoxs = {
   y: 0,
 };
 
+// set up cods
 function setup() {
   createCanvas(windowWidth, windowHeight);
   rows = Math.floor(height/CELL_SIZE);
@@ -32,11 +33,13 @@ function setup() {
   noStroke();
 }
 
+// drawGird
 function draw() {
   background(220);
   displayGrid();
 }
 
+// take out after cods done.
 function mousePressed() {
   let x = Math.floor(mouseX/CELL_SIZE);
   let y = Math.floor(mouseY/CELL_SIZE);
@@ -45,6 +48,7 @@ function mousePressed() {
 
 }
 
+// key for move player and boxs
 function keyPressed() {
   if (key === "e") {
     grid = generateEmptyGrid(cols, rows);
@@ -67,6 +71,7 @@ function keyPressed() {
   }
 }
 
+// function for move player
 function movePlayer(x, y) {
   if (x >= 0 && x < cols && y >= 0 && y < rows && grid[y][x] === OPEN_ROAD) {
     let oldX = thePlayer.x;
@@ -81,6 +86,7 @@ function movePlayer(x, y) {
   }
 }
 
+// function for move boxs but not done
 function moveBoxs(x, y) {
   if (x >= 0 && x < cols && y >= 0 && y < rows && grid[y][x] === OPEN_ROAD) {
     let oldX = theBoxs.x;
@@ -95,6 +101,7 @@ function moveBoxs(x, y) {
   }
 }
 
+// take out after cods done.
 function toggleCell(x, y) {
   if (x >= 0 && x < cols && y >= 0 && y < rows) {
     if (grid[y][x] === OPEN_ROAD) {
@@ -106,6 +113,7 @@ function toggleCell(x, y) {
   }
 }
 
+// setting grid
 function displayGrid() {
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
@@ -126,6 +134,7 @@ function displayGrid() {
   }
 }
 
+// take out after cods done.
 function generateEmptyGrid(cols, rows) {
   let newGrid = [];
   for (let y = 0; y < rows; y++) {
@@ -135,4 +144,30 @@ function generateEmptyGrid(cols, rows) {
     }
   }
   return newGrid;
+}
+
+function at(dx, dy) {
+  let newX = thePlayer.x + dx;
+  let newY = thePlayer.y + dy;
+
+  if (newX < 0 || newX >= cols || newY < 0 || newY >= rows) return;
+
+  // Case 1: Empty space → move player
+  if (grid[newY][newX] === OPEN_ROAD) {
+    movePlayer(newX, newY);
+  }
+
+  else if (grid[newY][newX] === BOXS) {
+    let boxNextX = newX + dx;
+    let boxNextY = newY + dy;
+
+    if (
+      boxNextX >= 0 && boxNextX < cols &&
+      boxNextY >= 0 && boxNextY < rows &&
+      grid[boxNextY][boxNextX] === OPEN_ROAD
+    ) {
+      moveBoxs(boxNextX, boxNextY);
+      movePlayer(newX, newY);
+    }
+  }
 }
