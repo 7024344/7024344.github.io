@@ -26,7 +26,7 @@ let marioImg;
 
 function preload() {
   boxsImg = loadImage("boxs.jpg");
-  marioImg = loadImage("mario.Img");
+  marioImg = loadImage("mario.jpg");
 }
 
 function setup() {
