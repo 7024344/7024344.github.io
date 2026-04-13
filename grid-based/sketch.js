@@ -19,10 +19,16 @@ let thePlayer = {
 };
 let theBoxs = {
   x: 2,
-  y: 0,
+  y: 1,
 };
+let boxsImg;
+let marioImg;
 
-// set up cods
+function preload() {
+  boxsImg = loadImage("boxs.jpg");
+  marioImg = loadImage("mario.Img");
+}
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   rows = Math.floor(height/CELL_SIZE);
@@ -33,13 +39,11 @@ function setup() {
   noStroke();
 }
 
-// drawGird
 function draw() {
   background(220);
   displayGrid();
 }
 
-// take out after cods done.
 function mousePressed() {
   let x = Math.floor(mouseX/CELL_SIZE);
   let y = Math.floor(mouseY/CELL_SIZE);
@@ -48,28 +52,29 @@ function mousePressed() {
 
 }
 
-// key for move player and boxs
 function keyPressed() {
   if (key === "e") {
     grid = generateEmptyGrid(cols, rows);
+    thePlayer = { x: 0, y: 0 };
+    theBoxs = { x: 2, y: 1 };
     grid[thePlayer.y][thePlayer.x] = PLAYER;
     grid[theBoxs.y][theBoxs.x] = BOXS;
+  } 
+
+  else if (key === "w") {
+    at(0, -1);
   }
   else if (key === "s") {
-    movePlayer(thePlayer.x, thePlayer.y + 1);
-  }
-  else if (key === "w") {
-    movePlayer(thePlayer.x, thePlayer.y - 1);
-  }
-  else if (key === "d") {
-    movePlayer(thePlayer.x + 1, thePlayer.y);
+    at(0, 1);
   }
   else if (key === "a") {
-    movePlayer(thePlayer.x - 1, thePlayer.y);
+    at(-1, 0);
+  }
+  else if (key === "d") {
+    at(1, 0);
   }
 }
 
-// function for move player
 function movePlayer(x, y) {
   if (x >= 0 && x < cols && y >= 0 && y < rows && grid[y][x] === OPEN_ROAD) {
     let oldX = thePlayer.x;
@@ -84,7 +89,6 @@ function movePlayer(x, y) {
   }
 }
 
-// function for move boxs but not done
 function moveBoxs(x, y) {
   if (x >= 0 && x < cols && y >= 0 && y < rows && grid[y][x] === OPEN_ROAD) {
     let oldX = theBoxs.x;
@@ -99,7 +103,6 @@ function moveBoxs(x, y) {
   }
 }
 
-// take out after cods done.
 function toggleCell(x, y) {
   if (x >= 0 && x < cols && y >= 0 && y < rows) {
     if (grid[y][x] === OPEN_ROAD) {
@@ -111,28 +114,27 @@ function toggleCell(x, y) {
   }
 }
 
-// setting grid
 function displayGrid() {
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
       if (grid[y][x] === OPEN_ROAD) {
         fill("white");
+        square(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
       }
       else if (grid[y][x] === CLOSE_ROAD) {
         fill("black");
+        square(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
       }
       else if (grid[y][x] === PLAYER) {
-        fill("green");
+        image(marioImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
       else if (grid[y][x] === BOXS) {
-        fill("yellow");
+        image(boxsImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
-      square(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
     }
   }
 }
 
-// take out after cods done.
 function generateEmptyGrid(cols, rows) {
   let newGrid = [];
   for (let y = 0; y < rows; y++) {
@@ -144,23 +146,29 @@ function generateEmptyGrid(cols, rows) {
   return newGrid;
 }
 
-// function checkMoves(dx, dy) {
-//   let newX = thePlayer.x + dx;
-//   let newY = thePlayer.y + dy;
+function at(dx, dy) {
+  let newX = thePlayer.x + dx;
+  let newY = thePlayer.y + dy;
 
-//   if (newX < 0 || newX >= cols || newY < 0 || newY >= rows) {
-//     if (grid[newY][newX] === OPEN_ROAD) {
-//       movePlayer(newX, newY);
-//     }
-  
-//     else if (grid[newY][newX] === BOXS) {
-//       let boxNextX = newX + dx;
-//       let boxNextY = newY + dy;
-  
-//       if (boxNextX >= 0 && boxNextX < cols && boxNextY >= 0 && boxNextY < rows && grid[boxNextY][boxNextX] === OPEN_ROAD) {
-//         moveBoxs(boxNextX, boxNextY);
-//         movePlayer(newX, newY);
-//       }
-//     }
-//   }
-// }
+  if (newX < 0 || newX >= cols || newY < 0 || newY >= rows) {
+    return;
+  }
+
+  if (grid[newY][newX] === OPEN_ROAD) {
+    movePlayer(newX, newY);
+  }
+
+  else if (grid[newY][newX] === BOXS) {
+    let boxNextX = newX + dx;
+    let boxNextY = newY + dy;
+
+    if (
+      boxNextX >= 0 && boxNextX < cols &&
+      boxNextY >= 0 && boxNextY < rows &&
+      grid[boxNextY][boxNextX] === OPEN_ROAD
+    ) {
+      moveBoxs(boxNextX, boxNextY);
+      movePlayer(newX, newY);
+    }
+  }
+}
