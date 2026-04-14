@@ -10,6 +10,7 @@ const OPEN_ROAD = 0;
 const CLOSE_ROAD = 1;
 const PLAYER = 9;
 const BOXS = 5;
+const YELLOWDOT = 3;
 let rows;
 let cols;
 let grid;
@@ -21,12 +22,15 @@ let theBoxs = {
   x: 2,
   y: 1,
 };
+let yellowImg;
 let boxsImg;
 let marioImg;
+let brickImg;
 
 function preload() {
   boxsImg = loadImage("boxs.jpg");
   marioImg = loadImage("mario.jpg");
+  brickImg = loadImage("brick.jpg");
 }
 
 function setup() {
@@ -36,6 +40,7 @@ function setup() {
   grid = generateEmptyGrid(cols, rows);
   grid[thePlayer.y][thePlayer.x] = PLAYER;
   grid[theBoxs.y][theBoxs.x] = BOXS;
+  gird[yellowDot.y][yellowDot.x] = YELLOWDOT;
   noStroke();
 }
 
@@ -62,16 +67,16 @@ function keyPressed() {
   } 
 
   else if (key === "w") {
-    at(0, -1);
+    putBox(0, -1);
   }
   else if (key === "s") {
-    at(0, 1);
+    putBox(0, 1);
   }
   else if (key === "a") {
-    at(-1, 0);
+    putBox(-1, 0);
   }
   else if (key === "d") {
-    at(1, 0);
+    putBox(1, 0);
   }
 }
 
@@ -122,14 +127,16 @@ function displayGrid() {
         square(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
       }
       else if (grid[y][x] === CLOSE_ROAD) {
-        fill("black");
-        square(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
+        image(brickImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
       else if (grid[y][x] === PLAYER) {
         image(marioImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
       else if (grid[y][x] === BOXS) {
         image(boxsImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      }
+      else if (grid[y][x] === YELLOWDOT) {
+        image(yellowImg, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
     }
   }
@@ -146,7 +153,7 @@ function generateEmptyGrid(cols, rows) {
   return newGrid;
 }
 
-function at(dx, dy) {
+function putBox(dx, dy) {
   let newX = thePlayer.x + dx;
   let newY = thePlayer.y + dy;
 
