@@ -10,6 +10,7 @@
 - [Games of Life](09-life)
 - [Character in Gird](10-character)
 - [Walker OOP Demo](12-walker)
+- [Fireworks Demo](13-fireworks)
 ## Assignments
 - [Interactive Scene](interactive-scene)
 - [Array and Object Notation](array-object)
