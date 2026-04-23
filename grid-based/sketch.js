@@ -169,11 +169,7 @@ function putBox(dx, dy) {
     let boxNextX = newX + dx;
     let boxNextY = newY + dy;
 
-    if (
-      boxNextX >= 0 && boxNextX < cols &&
-      boxNextY >= 0 && boxNextY < rows &&
-      grid[boxNextY][boxNextX] === OPEN_ROAD
-    ) {
+    if (boxNextX >= 0 && boxNextX < cols && boxNextY >= 0 && boxNextY < rows && grid[boxNextY][boxNextX] === OPEN_ROAD) {
       moveBoxs(boxNextX, boxNextY);
       movePlayer(newX, newY);
     }
