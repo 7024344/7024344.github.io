@@ -40,7 +40,7 @@ function setup() {
   grid = generateEmptyGrid(cols, rows);
   grid[thePlayer.y][thePlayer.x] = PLAYER;
   grid[theBoxs.y][theBoxs.x] = BOXS;
-  gird[yellowDot.y][yellowDot.x] = YELLOWDOT;
+  grid[yellowDot.y][yellowDot.x] = YELLOWDOT;
   noStroke();
 }
 
