@@ -16,19 +16,16 @@ function draw() {
     ball.y += ball.dy;
 
     //teleport if needed
-    if (ball.x + ball.radius > width) {
+    if (ball.x - ball.radius > width) {
       ball.x = -ball.radius;
     }
-
-    if (ball.x + ball,radius < 0) {
+    if (ball.x + ball.radius < 0) {
       ball.x = width + ball.radius;
     }
-
-    if (ball.y + ball.radius > width) {
+    if (ball.y - ball.radius > height) {
       ball.y = -ball.radius;
     }
-
-    if (ball.y + ball,radius < 0) {
+    if (ball.y + ball.radius < 0) {
       ball.y = height + ball.radius;
     }
 
@@ -39,13 +36,13 @@ function draw() {
 }
 
 function mousePressed() {
-  spawnBall();
+  spawnBall(mouseX, mouseY);
 }
 
-function spawnBall() {
+function spawnBall(_x, _y) {
   let theBall = {
-    x: random(width),
-    y: random(height),
+    x: _x,
+    y: _y,
     dx: random(-5, 5),
     dy: random(-5, 5),
     radius: random(10, 40),
